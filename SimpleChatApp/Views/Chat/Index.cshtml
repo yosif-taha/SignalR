@@ -1,0 +1,80 @@
+﻿@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Chat</h1>
+<input type="text" id="txt" />
+<input type="button" value="send" onclick="send()" />
+
+<input type="text" id="gtxt" />
+<input type="button" value="join" onclick="join()" /><br />
+<br />
+<input type="button" value="send to group" onclick="sendtogroup()" />
+<br />
+<ul id="ul">
+
+</ul>
+
+@section Scripts {
+
+    <script src="~/microsoft/signalr/dist/browser/signalr.js"></script>
+
+    <script>
+
+
+          name = prompt("Enter your name :");
+
+        //connection to server side based on Url
+         connection = new signalR.HubConnectionBuilder().withUrl("/chat").build();
+
+        //start connection
+        connection.start();
+
+        //send message to server side
+        function send()
+        {
+            var obj = {
+                "username": name,
+                "message": $("#txt").val() }      
+            connection.invoke("sendmessage",obj)
+        }
+
+        // receive message from server side and add it to list : (Callback Function)
+        connection.on("newmessage", function (mess) 
+        {
+            $("#ul").append("<li>" + mess.username + ": " + mess.message + "</li>");
+
+        })
+
+        //************************************ Group ************************************
+
+
+        // calling server side method to join group
+        function join()
+        {
+         connection.invoke("jointogroup", $("#gtxt").val(), name );   
+        }
+
+
+        // receive message from server side and add it to list : (Callback Function)
+        connection.on("newmember",function(n, g)
+        {
+           $("#ul").append("<li><i>" + n + " has joined the group" + g + "</i></li>");  
+        })
+
+
+
+        // calling server side method to send message to group
+        function sendtogroup()
+        {
+            connection.invoke("sendmessagetogroup",name,$("#gtxt").val() ,$("#txt").val());
+        }
+
+        // receive message from server side and add it to list : (Callback Function)
+        connection.on("newmessagegroup",function(n, g, m)
+        {
+            $("#ul").append("<li>" + name + "(" + g + ")" + m + "</li>");
+        })
+    </script>
+
+}
