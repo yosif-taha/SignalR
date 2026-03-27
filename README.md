@@ -20,7 +20,7 @@ This project demonstrates how to implement real-time communication, group messag
 * ASP.NET Core
 * SignalR
 * Entity Framework Core
-* SQL Server (or any EF-supported database)
+* SQL Server 
 * C#
 
 ---
@@ -134,16 +134,6 @@ sendmessagetogroup(name, groupname, message)
   └── ChatMessage.cs
 ```
 
----
 
-## 🚀 Future Improvements
-
-* 🔐 Authentication & Authorization (JWT / Identity)
-* 🟢 Online/Offline user status
-* 📨 Private messaging (1-to-1)
-* 📱 Frontend UI (Html / JS)
-* 📊 Message history pagination
-
----
 
 
